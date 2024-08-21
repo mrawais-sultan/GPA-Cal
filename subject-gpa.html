@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject GPA Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .calculator {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #00abe1;
+            margin-bottom: 20px;
+        }
+
+        label, input, button {
+            display: block;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            background-color: #00abe1;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #007eae;
+        }
+
+        p {
+            background-color: #f4f7f9;
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <h2>Calculate Subject GPA</h2>
+        <label>Enter Marks:</label>
+        <input type="number" id="marks" placeholder="Enter marks">
+        <label>Enter Credit Hours:</label>
+        <input type="number" id="subject-credit-hours" placeholder="Enter credit hours">
+        <button onclick="calculateSubjectGPA()">Calculate GPA</button>
+        <p id="subject-gpa-result"></p>
+    </div>
+
+    <script>
+        function convertMarksToGPA(marks) {
+            if (marks >= 85) return 4.0;
+            if (marks >= 80) return 3.7;
+            if (marks >= 75) return 3.3;
+            if (marks >= 70) return 3.0;
+            if (marks >= 65) return 2.7;
+            if (marks >= 60) return 2.3;
+            if (marks >= 50) return 2.0;
+            return 0.0;
+        }
+
+        function calculateSubjectGPA() {
+            let marks = parseFloat(document.getElementById("marks").value);
+            let creditHours = parseFloat(document.getElementById("subject-credit-hours").value);
+            let gpa = convertMarksToGPA(marks);
+            document.getElementById("subject-gpa-result").innerHTML = `Your GPA for the subject is: ${gpa} (Credit Hours: ${creditHours})`;
+        }
+    </script>
+
+</body>
+</html>

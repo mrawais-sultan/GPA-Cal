@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combined GPA Calculator</title>
+    <style>
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f9;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensures the body height takes the full viewport height */
+    flex-direction: column; /* Stacks elements vertically */
+}
+
+.calculator {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    margin-bottom: 20px; /* Allows some spacing at the bottom */
+}
+
+h2 {
+    color: #00abe1;
+    margin-bottom: 20px;
+}
+
+label, input, button {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+input[type="number"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+button {
+    background-color: #00abe1;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #007eae;
+}
+
+p {
+    background-color: #f4f7f9;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+</style>    
+</head>
+<body>
+
+    <div class="calculator">
+        <h2>Calculate Combined GPA</h2>
+        <label>Number of Semesters:</label>
+        <input type="number" id="num-semesters" placeholder="Number of semesters">
+        <button onclick="generateSemesterFields()">Enter Semesters</button>
+        <div id="semester-fields"></div>
+        <button onclick="calculateCombinedGPA()">Calculate Combined GPA</button>
+        <p id="combined-gpa-result"></p>
+    </div>
+
+    <script>
+        function convertMarksToGPA(marks) {
+            if (marks >= 85) return 4.0;
+            if (marks >= 80) return 3.7;
+            if (marks >= 75) return 3.3;
+            if (marks >= 70) return 3.0;
+            if (marks >= 65) return 2.7;
+            if (marks >= 60) return 2.3;
+            if (marks >= 50) return 2.0;
+            return 0.0;
+        }
+
+        function generateSemesterFields() {
+            let numSemesters = parseInt(document.getElementById("num-semesters").value);
+            let semesterFields = document.getElementById("semester-fields");
+            semesterFields.innerHTML = "";
+
+            for (let i = 0; i < numSemesters; i++) {
+                semesterFields.innerHTML += `
+                    <div>
+                        <h3>Semester ${i + 1}</h3>
+                        <label>Number of Subjects:</label>
+                        <input type="number" id="num-subjects-${i}" placeholder="Number of subjects">
+                        <button onclick="generateSubjectFields(${i})">Enter Subjects</button>
+                        <div id="subject-fields-${i}"></div>
+                    </div>`;
+            }
+        }
+
+        function generateSubjectFields(semesterIndex) {
+            let numSubjects = parseInt(document.getElementById(`num-subjects-${semesterIndex}`).value);
+            let subjectFields = document.getElementById(`subject-fields-${semesterIndex}`);
+            subjectFields.innerHTML = "";
+
+            for (let i = 0; i < numSubjects; i++) {
+                subjectFields.innerHTML += `
+                    <div>
+                        <label>Subject ${i + 1} Marks:</label>
+                        <input type="number" id="subject-marks-${semesterIndex}-${i}" placeholder="Marks">
+                        <label>Credit Hours:</label>
+                        <input type="number" id="subject-credit-hours-${semesterIndex}-${i}" placeholder="Credit Hours">
+                    </div>`;
+            }
+        }
+
+        function calculateCombinedGPA() {
+            let numSemesters = parseInt(document.getElementById("num-semesters").value);
+            let totalPoints = 0;
+            let totalCredits = 0;
+
+            for (let i = 0; i < numSemesters; i++) {
+                let numSubjects = parseInt(document.getElementById(`num-subjects-${i}`).value);
+
+                for (let j = 0; j < numSubjects; j++) {
+                    let marks = parseFloat(document.getElementById(`subject-marks-${i}-${j}`).value);
+                    let creditHours = parseFloat(document.getElementById(`subject-credit-hours-${i}-${j}`).value);
+                    let gpa = convertMarksToGPA(marks);
+                    totalPoints += gpa * creditHours;
+                    totalCredits += creditHours;
+                }
+            }
+
+            let combinedGPA = totalPoints / totalCredits;
+            document.getElementById("combined-gpa-result").innerHTML = `Your Combined GPA is: ${combinedGPA.toFixed(2)}`;
+        }
+    </script>
+
+</body>
+</html>
