@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semester GPA Calculator</title>
+    <style>
+      body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f9;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    overflow-y: auto; /* Allow scrolling */
+}
+
+.calculator {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    margin-top: 50px; /* Increased top margin for spacing */
+}
+
+h2 {
+    color: #00abe1;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    text-align: left;
+    margin: 10px 0 5px;
+}
+
+input[type="number"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+button {
+    background-color: #00abe1;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #007eae;
+}
+
+#semester-fields {
+    margin-top: 20px;
+}
+
+#semester-fields div {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+#subject-fields {
+    margin-top: 10px;
+}
+
+#subject-fields div {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+p {
+    background-color: #f4f7f9;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <h2>Calculate Semester GPA</h2>
+        <label>Number of Subjects:</label>
+        <input type="number" id="num-subjects" placeholder="Number of subjects">
+        <button onclick="generateSubjectFields()">Enter Subjects</button>
+        <div id="subject-fields"></div>
+        <button onclick="calculateSemesterGPA()">Calculate Semester GPA</button>
+        <p id="semester-gpa-result"></p>
+    </div>
+
+    <script>
+        function convertMarksToGPA(marks) {
+            if (marks >= 85) return 4.0;
+            if (marks >= 80) return 3.7;
+            if (marks >= 75) return 3.3;
+            if (marks >= 70) return 3.0;
+            if (marks >= 65) return 2.7;
+            if (marks >= 60) return 2.3;
+            if (marks >= 50) return 2.0;
+            return 0.0;
+        }
+
+        function generateSubjectFields() {
+            let numSubjects = parseInt(document.getElementById("num-subjects").value);
+            let subjectFields = document.getElementById("subject-fields");
+            subjectFields.innerHTML = "";
+
+            for (let i = 0; i < numSubjects; i++) {
+                subjectFields.innerHTML += `
+                    <div>
+                        <label>Subject ${i + 1} Marks:</label>
+                        <input type="number" id="subject-marks-${i}" placeholder="Marks">
+                        <label>Credit Hours:</label>
+                        <input type="number" id="subject-credit-hours-${i}" placeholder="Credit Hours">
+                    </div>`;
+            }
+        }
+
+        function calculateSemesterGPA() {
+            let numSubjects = parseInt(document.getElementById("num-subjects").value);
+            let totalPoints = 0;
+            let totalCredits = 0;
+
+            for (let i = 0; i < numSubjects; i++) {
+                let marks = parseFloat(document.getElementById(`subject-marks-${i}`).value);
+                let creditHours = parseFloat(document.getElementById(`subject-credit-hours-${i}`).value);
+                let gpa = convertMarksToGPA(marks);
+                totalPoints += gpa * creditHours;
+                totalCredits += creditHours;
+            }
+
+            let semesterGPA = totalPoints / totalCredits;
+            document.getElementById("semester-gpa-result").innerHTML = `Your Semester GPA is: ${semesterGPA.toFixed(2)}`;
+        }
+    </script>
+
+</body>
+</html>
